@@ -394,6 +394,4 @@ This CI/CD pipeline demonstrates:
 
 This project is part of the Kaiburr Assessment and is for educational purposes.
 
----
 
-**Last Updated:** 2024
