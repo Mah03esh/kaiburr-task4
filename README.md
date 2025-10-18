@@ -145,11 +145,11 @@ Each successful pipeline run creates **two tags** per image:
 ## 📸 Screenshots & Evidence
 
 ### 1. Workflow Runs Overview
-![Workflow Runs](screenshots/01_workflow_runs.png)
+![Workflow Runs](screenshots/1.png)
 **Capture:** Navigate to repository → Actions tab → Show list of pipeline runs with status indicators
 
 ### 2. Workflow Details
-![Workflow Details](screenshots/02_workflow_details.png)
+![Workflow Details](screenshots/2.png)
 **Capture:** Click on a specific workflow run → Show jobs (Backend CI, Frontend CI, Summary) with execution times
 
 ### 3. Backend CI Job
