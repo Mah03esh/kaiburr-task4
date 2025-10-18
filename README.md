@@ -144,45 +144,45 @@ Each successful pipeline run creates **two tags** per image:
 
 ## 📸 Screenshots & Evidence
 
-### 1. Workflow Runs Overview
-![Workflow Runs](screenshots/1.png)
-**Capture:** Navigate to repository → Actions tab → Show list of pipeline runs with status indicators
+### 1. Backend Workflow Runs Overview
+![Backend Workflow Runs](screenshots/01_backend_workflow_runs.png)
+**Capture:** Navigate to Task 1 repository → Actions tab → Show list of backend pipeline runs with status indicators
 
-### 2. Workflow Details
-![Workflow Details](screenshots/2.png)
-**Capture:** Click on a specific workflow run → Show jobs (Backend CI, Frontend CI, Summary) with execution times
+### 2. Backend Workflow Details
+![Backend Workflow Details](screenshots/02_backend_workflow_details.png)
+**Capture:** Click on successful backend workflow run → Show job details with execution times and artifacts
 
-### 3. Backend CI Job
-![Backend Job](screenshots/03_backend_job.png)
-**Capture:** Open Backend CI job → Show all steps expanded with green checkmarks
+### 3. Maven Build Output
+![Maven Build](screenshots/03_backend_maven_build.png)
+**Capture:** Backend CI → Code Build - Maven step → Show Maven compilation and JAR creation logs with BUILD SUCCESS
 
-### 4. Frontend CI Job
-![Frontend Job](screenshots/04_frontend_job.png)
-**Capture:** Open Frontend CI job → Show all steps expanded with green checkmarks
+### 4. Backend Docker Build
+![Backend Docker](screenshots/04_backend_docker_build.png)
+**Capture:** Backend CI → Docker Build step → Show multi-stage build completion and image tags
 
-### 5. Maven Build Output
-![Maven Build](screenshots/05_maven_build.png)
-**Capture:** Backend CI → Code Build - Maven step → Show Maven compilation and JAR creation logs
+### 5. Backend Artifacts
+![Backend Artifacts](screenshots/05_backend_artifacts.png)
+**Capture:** Backend workflow run → Artifacts section → Show backend-jar artifact with size (23.6 MB)
 
-### 6. npm Build Output
-![npm Build](screenshots/06_npm_build.png)
-**Capture:** Frontend CI → Code Build - npm step → Show Vite build output with chunk sizes
+### 6. Frontend Workflow Runs Overview
+![Frontend Workflow Runs](screenshots/06_frontend_workflow_runs.png)
+**Capture:** Navigate to Task 3 repository → Actions tab → Show list of frontend pipeline runs with status indicators
 
-### 7. Backend Docker Build
-![Backend Docker](screenshots/07_docker_backend.png)
-**Capture:** Backend CI → Docker Build step → Show multi-stage build layers and final image ID
+### 7. Frontend Workflow Details
+![Frontend Workflow Details](screenshots/07_frontend_workflow_details.png)
+**Capture:** Click on successful frontend workflow run → Show job details with execution times and artifacts
 
-### 8. Frontend Docker Build
-![Frontend Docker](screenshots/08_docker_frontend.png)
-**Capture:** Frontend CI → Docker Build step → Show multi-stage build layers and nginx setup
+### 8. npm Build Output
+![npm Build](screenshots/08_frontend_npm_build.png)
+**Capture:** Frontend CI → Code Build - npm step → Show Vite build output with dist/ creation
 
-### 9. Artifacts Uploaded
-![Artifacts](screenshots/09_artifacts.png)
-**Capture:** Workflow run page → Artifacts section → Show backend-jar and frontend-dist with sizes
+### 9. Frontend Docker Build
+![Frontend Docker](screenshots/09_frontend_docker_build.png)
+**Capture:** Frontend CI → Docker Build step → Show multi-stage build with Node + Nginx layers
 
-### 10. Pipeline Summary
-![Summary](screenshots/10_summary.png)
-**Capture:** Summary job → Show complete report with job statuses, Docker tags, and metadata
+### 10. Frontend Artifacts
+![Frontend Artifacts](screenshots/10_frontend_artifacts.png)
+**Capture:** Frontend workflow run → Artifacts section → Show frontend-dist artifact
 
 ---
 
