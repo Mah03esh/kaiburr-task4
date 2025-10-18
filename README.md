@@ -1,22 +1,22 @@
 # Task 4: CI/CD Pipeline - Kaiburr Assessment
 
-## 📋 Overview
+## Overview
 
 This project implements a **complete CI/CD pipeline** using **GitHub Actions** to automate the build and deployment process for the Kaiburr Task Management Application.
 
-### 🎯 Pipeline Objectives
+###  Pipeline Objectives
 
-- ✅ Automated build and test for **Java Backend** (Spring Boot)
-- ✅ Automated build for **React Frontend** (TypeScript + Ant Design)
-- ✅ Multi-stage Docker image creation for both services
-- ✅ Parallel execution of Backend and Frontend CI jobs
-- ✅ Artifact uploading for build outputs
-- ✅ Automatic versioning using GitHub run numbers
-- ✅ Pipeline summary and status reporting
+-   Automated build and test for **Java Backend** (Spring Boot)
+-   Automated build for **React Frontend** (TypeScript + Ant Design)
+-   Multi-stage Docker image creation for both services
+-   Parallel execution of Backend and Frontend CI jobs
+-   Artifact uploading for build outputs
+-   Automatic versioning using GitHub run numbers
+-   Pipeline summary and status reporting
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Repository Structure
 
@@ -48,7 +48,7 @@ task4/
 
 ---
 
-## 🔄 Pipeline Workflow
+## Pipeline Workflow
 
 ### Triggers
 
@@ -125,7 +125,7 @@ graph LR
 
 ---
 
-## 🏷️ Image Tagging Strategy
+##  Image Tagging Strategy
 
 Each successful pipeline run creates **two tags** per image:
 
@@ -142,7 +142,7 @@ Each successful pipeline run creates **two tags** per image:
 
 ---
 
-## 📸 Screenshots & Evidence
+## Screenshots
 
 ### 1. Backend Workflow Runs Overview
 ![Backend Workflow Runs](screenshots/01_backend_workflow_runs.png)
@@ -186,7 +186,7 @@ Each successful pipeline run creates **two tags** per image:
 
 ---
 
-## 🚀 Usage Instructions
+## Usage Instructions
 
 ### Viewing Pipeline Results
 
@@ -363,13 +363,13 @@ docker ps -a
 
 This CI/CD pipeline demonstrates:
 
-1. ✅ GitHub Actions workflow creation
-2. ✅ Parallel job execution
-3. ✅ Multi-stage Docker builds
-4. ✅ Caching strategies for faster builds
-5. ✅ Artifact management
-6. ✅ Automated versioning
-7. ✅ Status reporting and summaries
+1.   GitHub Actions workflow creation
+2.   Parallel job execution
+3.   Multi-stage Docker builds
+4.   Caching strategies for faster builds
+5.   Artifact management
+6.   Automated versioning
+7.   Status reporting and summaries
 
 ---
 
@@ -382,7 +382,7 @@ This CI/CD pipeline demonstrates:
 
 ---
 
-## 👤 Author
+## Author
 
 **Mahesh **
 - GitHub: [@mah03esh](https://github.com/mah03esh)
