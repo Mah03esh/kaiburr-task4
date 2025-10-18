@@ -1,0 +1,57 @@
+# =====================================
+# Task 4 CI/CD Pipeline - Git Ignore
+# =====================================
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE Files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# Build Output
+target/
+build/
+dist/
+out/
+*.log
+
+# Docker
+*.tar
+*.tar.gz
+docker-compose.override.yml
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+*.cache
+
+# Environment Files
+.env
+.env.local
+.env.production
+
+# Screenshots (placeholder - remove if you want to track them)
+# screenshots/*.png
+# screenshots/*.jpg
+
+# GitHub Actions Logs (local testing)
+act/
+.act/
+
+# Secrets
+secrets/
+credentials/
+*.key
+*.pem
+
+# Coverage Reports
+coverage/
+*.coverage
