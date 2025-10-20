@@ -142,47 +142,125 @@ Each successful pipeline run creates **two tags** per image:
 
 ---
 
-## Screenshots
+## Pipeline Execution Screenshots
+
+All screenshots demonstrate the complete CI/CD pipeline execution for both backend and frontend applications.
 
 ### 1. Backend Workflow Runs Overview
+Shows the list of backend pipeline executions in the GitHub Actions tab.
+
 ![Backend Workflow Runs](screenshots/01_backend_workflow_runs.png)
-**Capture:** Navigate to Task 1 repository → Actions tab → Show list of backend pipeline runs with status indicators
+
+---
 
 ### 2. Backend Workflow Details
+Displays detailed job information, execution times, and artifacts for a successful backend build.
+
 ![Backend Workflow Details](screenshots/02_backend_workflow_details.png)
-**Capture:** Click on successful backend workflow run → Show job details with execution times and artifacts
+
+---
 
 ### 3. Maven Build Output
+Maven compilation logs showing successful JAR creation with BUILD SUCCESS message.
+
 ![Maven Build](screenshots/03_backend_maven_build.png)
-**Capture:** Backend CI → Code Build - Maven step → Show Maven compilation and JAR creation logs with BUILD SUCCESS
+
+---
 
 ### 4. Backend Docker Build
+Multi-stage Docker build completion for the Spring Boot backend application.
+
 ![Backend Docker](screenshots/04_backend_docker_build.png)
-**Capture:** Backend CI → Docker Build step → Show multi-stage build completion and image tags
+
+---
 
 ### 5. Backend Artifacts
+Backend workflow artifacts section showing the generated JAR file (23.6 MB).
+
 ![Backend Artifacts](screenshots/05_backend_artifacts.png)
-**Capture:** Backend workflow run → Artifacts section → Show backend-jar artifact with size (23.6 MB)
+
+---
 
 ### 6. Frontend Workflow Runs Overview
+Frontend pipeline execution history in the GitHub Actions interface.
+
 ![Frontend Workflow Runs](screenshots/06_frontend_workflow_runs.png)
-**Capture:** Navigate to Task 3 repository → Actions tab → Show list of frontend pipeline runs with status indicators
+
+---
 
 ### 7. Frontend Workflow Details
+Frontend job details with execution times and build artifacts.
+
 ![Frontend Workflow Details](screenshots/07_frontend_workflow_details.png)
-**Capture:** Click on successful frontend workflow run → Show job details with execution times and artifacts
+
+---
 
 ### 8. npm Build Output
+Vite build process output showing successful creation of the dist/ directory.
+
 ![npm Build](screenshots/08_frontend_npm_build.png)
-**Capture:** Frontend CI → Code Build - npm step → Show Vite build output with dist/ creation
+
+---
 
 ### 9. Frontend Docker Build
+Multi-stage Docker build with Node.js build stage and Nginx runtime stage.
+
 ![Frontend Docker](screenshots/09_frontend_docker_build.png)
-**Capture:** Frontend CI → Docker Build step → Show multi-stage build with Node + Nginx layers
+
+---
 
 ### 10. Frontend Artifacts
+Frontend build artifacts available for download from the workflow run.
+
 ![Frontend Artifacts](screenshots/10_frontend_artifacts.png)
-**Capture:** Frontend workflow run → Artifacts section → Show frontend-dist artifact
+
+---
+
+## Testing & Validation
+
+The CI/CD pipeline has been tested with multiple executions. Test scenarios follow the Given-When-Then syntax.
+
+### Test Scenarios
+
+**Scenario 1: Pipeline Trigger on Push**  
+Given code changes are committed to the main branch  
+When a push event occurs  
+Then the CI/CD pipeline automatically starts both backend and frontend jobs in parallel  
+
+**Scenario 2: Backend Build Process**  
+Given the backend job is triggered  
+When Maven executes `mvn clean package -DskipTests`  
+Then a JAR file is successfully created and uploaded as an artifact  
+
+**Scenario 3: Frontend Build Process**  
+Given the frontend job is triggered  
+When npm executes `npm ci && npm run build`  
+Then the production build is created in the dist/ directory and uploaded as an artifact  
+
+**Scenario 4: Backend Docker Image Creation**  
+Given the backend code is built successfully  
+When the Docker build step executes  
+Then a multi-stage Docker image is created with tags for version and latest  
+
+**Scenario 5: Frontend Docker Image Creation**  
+Given the frontend code is built successfully  
+When the Docker build step executes  
+Then a multi-stage Docker image is created with Nginx serving the static files  
+
+**Scenario 6: Artifact Upload and Retention**  
+Given both backend and frontend builds complete successfully  
+When the upload artifact steps execute  
+Then artifacts are stored with 7-day retention and available for download  
+
+**Scenario 7: Pipeline Summary Generation**  
+Given both backend and frontend jobs complete  
+When the summary job executes  
+Then a comprehensive report is generated showing job status and Docker image tags  
+
+**Scenario 8: Manual Pipeline Trigger**  
+Given a user has repository access  
+When the "Run workflow" button is clicked in the Actions tab  
+Then the pipeline executes with manually specified parameters  
 
 ---
 
