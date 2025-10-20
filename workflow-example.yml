@@ -48,21 +48,21 @@ jobs:
       - name: Docker Build - Backend
         working-directory: ./task1
         run: |
-          echo "🐳 Building Docker image for Backend..."
+          echo "Building Docker image for Backend..."
           docker build -t ${{ env.BACKEND_IMAGE }}:${{ github.run_number }} .
           docker build -t ${{ env.BACKEND_IMAGE }}:latest .
-          echo "✅ Docker image built successfully!"
+          echo "Docker image built successfully!"
 
       - name: Docker Push - Simulate
         run: |
           echo "=========================================="
-          echo "🚀 DOCKER PUSH SIMULATION - BACKEND"
+          echo "DOCKER PUSH SIMULATION - BACKEND"
           echo "=========================================="
           echo "Image Tag 1: ${{ env.BACKEND_IMAGE }}:${{ github.run_number }}"
           echo "Image Tag 2: ${{ env.BACKEND_IMAGE }}:latest"
           echo "Registry: docker.io/${{ github.repository_owner }}"
           echo "Full Image: docker.io/${{ github.repository_owner }}/${{ env.BACKEND_IMAGE }}:${{ github.run_number }}"
-          echo "✅ Image build and tag successful!"
+          echo "Image build and tag successful!"
           echo "=========================================="
 
       - name: Upload Backend Artifact
@@ -93,31 +93,31 @@ jobs:
       - name: Code Build - npm
         working-directory: ./task3
         run: |
-          echo "📦 Installing dependencies..."
+          echo " Installing dependencies..."
           npm ci
-          echo "🔨 Building React Frontend..."
+          echo "Building React Frontend..."
           npm run build
-          echo "✅ Frontend build completed!"
+          echo " Frontend build completed!"
           ls -lh dist/
 
       - name: Docker Build - Frontend
         working-directory: ./task3
         run: |
-          echo "🐳 Building Docker image for Frontend..."
+          echo "Building Docker image for Frontend..."
           docker build -t ${{ env.FRONTEND_IMAGE }}:${{ github.run_number }} .
           docker build -t ${{ env.FRONTEND_IMAGE }}:latest .
-          echo "✅ Docker image built successfully!"
+          echo "Docker image built successfully!"
 
       - name: Docker Push - Simulate
         run: |
           echo "=========================================="
-          echo "🚀 DOCKER PUSH SIMULATION - FRONTEND"
+          echo "DOCKER PUSH SIMULATION - FRONTEND"
           echo "=========================================="
           echo "Image Tag 1: ${{ env.FRONTEND_IMAGE }}:${{ github.run_number }}"
           echo "Image Tag 2: ${{ env.FRONTEND_IMAGE }}:latest"
           echo "Registry: docker.io/${{ github.repository_owner }}"
           echo "Full Image: docker.io/${{ github.repository_owner }}/${{ env.FRONTEND_IMAGE }}:${{ github.run_number }}"
-          echo "✅ Image build and tag successful!"
+          echo "Image build and tag successful!"
           echo "=========================================="
 
       - name: Upload Frontend Artifact
@@ -140,19 +140,19 @@ jobs:
       - name: Generate Summary Report
         run: |
           echo "==========================================="
-          echo "🎯 KAIBURR CI/CD PIPELINE SUMMARY"
+          echo "KAIBURR CI/CD PIPELINE SUMMARY"
           echo "==========================================="
-          echo "📅 Date: $(date '+%Y-%m-%d %H:%M:%S')"
-          echo "🔢 Run Number: ${{ github.run_number }}"
-          echo "🌿 Branch: ${{ github.ref_name }}"
-          echo "👤 Triggered by: ${{ github.actor }}"
-          echo "📝 Commit: ${{ github.sha }}"
+          echo "Date: $(date '+%Y-%m-%d %H:%M:%S')"
+          echo "Run Number: ${{ github.run_number }}"
+          echo "Branch: ${{ github.ref_name }}"
+          echo "Triggered by: ${{ github.actor }}"
+          echo "Commit: ${{ github.sha }}"
           echo ""
-          echo "📊 Job Status:"
-          echo "  Backend CI: ${{ needs.backend-ci.result }}"
-          echo "  Frontend CI: ${{ needs.frontend-ci.result }}"
+          echo "Job Status:"
+          echo " Backend CI: ${{ needs.backend-ci.result }}"
+          echo " Frontend CI: ${{ needs.frontend-ci.result }}"
           echo ""
-          echo "🐳 Docker Images:"
+          echo "Docker Images:"
           echo "  ${{ env.BACKEND_IMAGE }}:${{ github.run_number }}"
           echo "  ${{ env.FRONTEND_IMAGE }}:${{ github.run_number }}"
           echo "==========================================="
