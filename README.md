@@ -2,19 +2,15 @@
 
 ## Overview
 
-This project implements a **complete CI/CD pipeline** using **GitHub Actions** to automate the build and deployment process for the Kaiburr Task Management Application.
+Complete CI/CD pipeline using **GitHub Actions** to automate build and deployment for the Kaiburr Task Management Application.
 
-###  Pipeline Objectives
+## Pipeline Objectives
 
--   Automated build and test for **Java Backend** (Spring Boot)
--   Automated build for **React Frontend** (TypeScript + Ant Design)
--   Multi-stage Docker image creation for both services
--   Parallel execution of Backend and Frontend CI jobs
--   Artifact uploading for build outputs
--   Automatic versioning using GitHub run numbers
--   Pipeline summary and status reporting
-
----
+- Automated build for Java Backend (Spring Boot) and React Frontend (TypeScript + Ant Design)
+- Multi-stage Docker image creation for both services
+- Parallel execution of Backend and Frontend CI jobs
+- Artifact uploading with 7-day retention
+- Automatic versioning using GitHub run numbers
 
 ## Architecture
 
@@ -22,247 +18,231 @@ This project implements a **complete CI/CD pipeline** using **GitHub Actions** t
 
 ```
 task4/
-├── .github/
-│   └── workflows/
-│       └── ci-cd-pipeline.yml      # Main CI/CD workflow
-├── screenshots/                     # Pipeline execution screenshots
-│   ├── 01_workflow_runs.png
-│   ├── 02_workflow_details.png
-│   ├── 03_backend_job.png
-│   ├── 04_frontend_job.png
-│   ├── 05_maven_build.png
-│   ├── 06_npm_build.png
-│   ├── 07_docker_backend.png
-│   ├── 08_docker_frontend.png
-│   ├── 09_artifacts.png
-│   └── 10_summary.png
-├── README.md                        # This file
-└── .gitignore                       # Git ignore rules
+├── .github/workflows/
+│   └── ci-cd-pipeline.yml      # Main CI/CD workflow
+├── screenshots/                 # 10 pipeline execution screenshots
+├── README.md
+└── .gitignore
 ```
 
 ### Related Repositories
 
-- **Backend (Task 1)**: https://github.com/mah03esh/kaiburr-task1
-- **Frontend (Task 3)**: https://github.com/mah03esh/kaiburr-task3
-- **CI/CD Pipeline (Task 4)**: https://github.com/mah03esh/kaiburr-task4
+- Backend (Task 1): https://github.com/mah03esh/kaiburr-task1
+- Frontend (Task 3): https://github.com/mah03esh/kaiburr-task3
+- CI/CD Pipeline (Task 4): https://github.com/mah03esh/kaiburr-task4
 
----
 
 ## Pipeline Workflow
 
 ### Triggers
 
-The pipeline is triggered by:
-- **Push** to `main` branch
-- **Pull Requests** to `main` branch
-- **Manual dispatch** (via GitHub UI)
+- Push to `main` branch
+- Pull Requests to `main` branch
+- Manual dispatch (via GitHub UI)
 
 ### Jobs Overview
 
-```mermaid
-graph LR
-    A[Push to main] --> B[Backend CI]
-    A --> C[Frontend CI]
-    B --> D[Summary]
-    C --> D
-```
+**Job 1: Backend CI** (ubuntu-latest)
+1. Checkout Code → Setup JDK 17 → Maven Build → Docker Build → Upload Artifact
 
-#### **Job 1: Backend CI** (runs on ubuntu-latest)
+**Job 2: Frontend CI** (ubuntu-latest)
+1. Checkout Code → Setup Node.js 20 → npm Build → Docker Build → Upload Artifact
 
-1. **Checkout Code** - Clone repository
-2. **Setup JDK 17** - Install Java Development Kit with Maven cache
-3. **Code Build - Maven** - `mvn clean package -DskipTests`
-4. **Docker Build - Backend** - Multi-stage Docker image creation
-5. **Docker Push - Simulate** - Display image tags and registry info
-6. **Upload Backend Artifact** - Save JAR file (7-day retention)
+**Job 3: Summary Report** (ubuntu-latest)
+- Executes after both jobs complete
+- Generates pipeline summary with job status and Docker image tags
 
-#### **Job 2: Frontend CI** (runs on ubuntu-latest)
+## Docker Images
 
-1. **Checkout Code** - Clone repository
-2. **Setup Node.js 20** - Install Node with npm cache
-3. **Code Build - npm** - `npm ci && npm run build`
-4. **Docker Build - Frontend** - Multi-stage Docker image creation
-5. **Docker Push - Simulate** - Display image tags and registry info
-6. **Upload Frontend Artifact** - Save built static files (7-day retention)
+### Backend (Multi-Stage)
+- **Build**: `maven:3.9-eclipse-temurin-17-alpine` → Maven build
+- **Runtime**: `eclipse-temurin:17-jre-alpine` → Minimal JRE, port 8080
 
-#### **Job 3: Summary Report** (runs on ubuntu-latest)
+### Frontend (Multi-Stage)
+- **Build**: `node:20-alpine` → npm build
+- **Runtime**: `nginx:alpine` → Serves static files, port 80
 
-- Executes after both Backend and Frontend jobs complete
-- Generates comprehensive pipeline summary
-- Displays job status, Docker image tags, and metadata
+## Image Tagging Strategy
 
----
+Each run creates two tags per image:
+- **Versioned**: `kaiburr-backend:42` (run number)
+- **Latest**: `kaiburr-backend:latest`
 
-## 🐳 Docker Images
-
-### Backend Image (Multi-Stage Build)
-
-**Stage 1: Build**
-- Base: `maven:3.9-eclipse-temurin-17-alpine`
-- Copies `pom.xml` and source code
-- Runs Maven build: `mvn clean package -DskipTests`
-
-**Stage 2: Runtime**
-- Base: `eclipse-temurin:17-jre-alpine`
-- Minimal JRE-only image
-- Copies JAR from build stage
-- Exposes port 8080
-- Entry point: `java -jar task1.jar`
-
-### Frontend Image (Multi-Stage Build)
-
-**Stage 1: Build**
-- Base: `node:20-alpine`
-- Installs dependencies: `npm ci`
-- Builds production bundle: `npm run build`
-
-**Stage 2: Runtime**
-- Base: `nginx:alpine`
-- Copies custom nginx configuration
-- Copies built static files from build stage
-- Exposes port 80
-- Serves React SPA with fallback routing
-
----
-
-##  Image Tagging Strategy
-
-Each successful pipeline run creates **two tags** per image:
-
-1. **Versioned Tag**: `image-name:{run_number}`
-   - Example: `kaiburr-backend:42`
-   - Tracks specific pipeline executions
-
-2. **Latest Tag**: `image-name:latest`
-   - Always points to most recent build
-
-**Full Image Names:**
-- `docker.io/mah03esh/kaiburr-backend:{run_number}`
-- `docker.io/mah03esh/kaiburr-frontend:{run_number}`
-
----
 
 ## Pipeline Execution Screenshots
 
-All screenshots demonstrate the complete CI/CD pipeline execution for both backend and frontend applications.
+All screenshots demonstrate the complete CI/CD pipeline execution. Test scenarios follow Given-When-Then syntax for standardization.
 
-### 1. Backend Workflow Runs Overview
-Shows the list of backend pipeline executions in the GitHub Actions tab.
+### Screenshot 1: Backend Workflow Runs Overview
+
+**Scenario: View Backend Pipeline Execution History**  
+Given the CI/CD pipeline has been executed multiple times  
+When the user navigates to the GitHub Actions tab  
+Then a list of all backend workflow runs is displayed  
+And each run shows the workflow name, status, branch, commit message, and execution time  
+And the most recent runs appear at the top  
 
 ![Backend Workflow Runs](screenshots/01_backend_workflow_runs.png)
 
 ---
 
-### 2. Backend Workflow Details
-Displays detailed job information, execution times, and artifacts for a successful backend build.
+### Screenshot 2: Backend Workflow Details
+
+**Scenario: View Detailed Backend Job Information**  
+Given a backend workflow run has completed successfully  
+When the user clicks on a specific workflow run  
+Then detailed job information is displayed including execution times  
+And the workflow summary shows all completed steps  
+And artifacts section displays the generated JAR file  
+And the total execution time is shown  
 
 ![Backend Workflow Details](screenshots/02_backend_workflow_details.png)
 
 ---
 
-### 3. Maven Build Output
-Maven compilation logs showing successful JAR creation with BUILD SUCCESS message.
+### Screenshot 3: Maven Build Output
+
+**Scenario: Maven Compilation and Package Creation**  
+Given the backend CI job has started  
+When Maven executes `mvn clean package -DskipTests`  
+Then the build logs show dependency resolution  
+And source code compilation completes successfully  
+And a JAR file is created in the target directory  
+And the console displays "BUILD SUCCESS" message  
 
 ![Maven Build](screenshots/03_backend_maven_build.png)
 
 ---
 
-### 4. Backend Docker Build
-Multi-stage Docker build completion for the Spring Boot backend application.
+### Screenshot 4: Backend Docker Build
+
+**Scenario: Multi-Stage Docker Image Creation for Backend**  
+Given the Maven build has completed successfully  
+When the Docker build step executes  
+Then a multi-stage Dockerfile builds the image  
+And Stage 1 uses `maven:3.9-eclipse-temurin-17-alpine` as build base  
+And Stage 2 uses `eclipse-temurin:17-jre-alpine` as runtime base  
+And the final image is tagged with version number and "latest"  
+And the build completes without errors  
 
 ![Backend Docker](screenshots/04_backend_docker_build.png)
 
 ---
 
-### 5. Backend Artifacts
-Backend workflow artifacts section showing the generated JAR file (23.6 MB).
+### Screenshot 5: Backend Artifacts
+
+**Scenario: Upload Backend Build Artifacts**  
+Given the backend build and Docker image creation are complete  
+When the upload artifact step executes  
+Then the JAR file is uploaded to GitHub Actions  
+And the artifact is named "backend-jar"  
+And the artifact size is displayed (23.6 MB)  
+And the retention period is set to 7 days  
+And the artifact is available for download  
 
 ![Backend Artifacts](screenshots/05_backend_artifacts.png)
 
 ---
 
-### 6. Frontend Workflow Runs Overview
-Frontend pipeline execution history in the GitHub Actions interface.
+### Screenshot 6: Frontend Workflow Runs Overview
+
+**Scenario: View Frontend Pipeline Execution History**  
+Given the CI/CD pipeline has executed frontend builds  
+When the user navigates to the GitHub Actions tab  
+Then a list of all frontend workflow runs is displayed  
+And each run shows status, branch, commit details, and timestamp  
+And successful runs are indicated with green checkmarks  
 
 ![Frontend Workflow Runs](screenshots/06_frontend_workflow_runs.png)
 
 ---
 
-### 7. Frontend Workflow Details
-Frontend job details with execution times and build artifacts.
+### Screenshot 7: Frontend Workflow Details
+
+**Scenario: View Detailed Frontend Job Information**  
+Given a frontend workflow run has completed  
+When the user opens a specific workflow run  
+Then the job details page displays all execution steps  
+And timing information for each step is shown  
+And the artifacts section shows the frontend build output  
+And the total workflow duration is displayed  
 
 ![Frontend Workflow Details](screenshots/07_frontend_workflow_details.png)
 
 ---
 
-### 8. npm Build Output
-Vite build process output showing successful creation of the dist/ directory.
+### Screenshot 8: npm Build Output
+
+**Scenario: Vite Build Process for React Application**  
+Given the frontend CI job has started  
+When npm executes `npm ci && npm run build`  
+Then dependencies are installed cleanly  
+And Vite builds the production bundle  
+And the dist/ directory is created with optimized files  
+And the console shows successful build completion  
+And the bundle size is displayed  
 
 ![npm Build](screenshots/08_frontend_npm_build.png)
 
 ---
 
-### 9. Frontend Docker Build
-Multi-stage Docker build with Node.js build stage and Nginx runtime stage.
+### Screenshot 9: Frontend Docker Build
+
+**Scenario: Multi-Stage Docker Image Creation for Frontend**  
+Given the npm build has completed successfully  
+When the Docker build step executes  
+Then a multi-stage Dockerfile builds the image  
+And Stage 1 uses `node:20-alpine` to build the React app  
+And Stage 2 uses `nginx:alpine` to serve static files  
+And the built files are copied from build stage to runtime stage  
+And the final image is tagged with version and "latest"  
 
 ![Frontend Docker](screenshots/09_frontend_docker_build.png)
 
 ---
 
-### 10. Frontend Artifacts
-Frontend build artifacts available for download from the workflow run.
+### Screenshot 10: Frontend Artifacts
+
+**Scenario: Upload Frontend Build Artifacts**  
+Given the frontend build and Docker image creation are complete  
+When the upload artifact step executes  
+Then the dist/ directory is uploaded to GitHub Actions  
+And the artifact is named "frontend-dist"  
+And the artifact is available for download from the workflow run  
+And the retention period is set to 7 days  
 
 ![Frontend Artifacts](screenshots/10_frontend_artifacts.png)
 
----
 
 ## Testing & Validation
 
-The CI/CD pipeline has been tested with multiple executions. Test scenarios follow the Given-When-Then syntax.
+Pipeline tested with multiple executions. Test scenarios follow Given-When-Then syntax.
 
-### Test Scenarios
-
-**Scenario 1: Pipeline Trigger on Push**  
+**Scenario 1: Automatic Pipeline Trigger on Push**  
 Given code changes are committed to the main branch  
 When a push event occurs  
 Then the CI/CD pipeline automatically starts both backend and frontend jobs in parallel  
 
-**Scenario 2: Backend Build Process**  
+**Scenario 2: Backend Maven Build**  
 Given the backend job is triggered  
 When Maven executes `mvn clean package -DskipTests`  
 Then a JAR file is successfully created and uploaded as an artifact  
 
-**Scenario 3: Frontend Build Process**  
+**Scenario 3: Frontend npm Build**  
 Given the frontend job is triggered  
 When npm executes `npm ci && npm run build`  
-Then the production build is created in the dist/ directory and uploaded as an artifact  
+Then the production build is created in the dist/ directory  
 
-**Scenario 4: Backend Docker Image Creation**  
-Given the backend code is built successfully  
-When the Docker build step executes  
-Then a multi-stage Docker image is created with tags for version and latest  
+**Scenario 4: Parallel Job Execution**  
+Given a push to main triggers the pipeline  
+When both backend and frontend jobs start  
+Then they execute simultaneously on separate runners  
+And both complete within 4-6 minutes total  
 
-**Scenario 5: Frontend Docker Image Creation**  
-Given the frontend code is built successfully  
-When the Docker build step executes  
-Then a multi-stage Docker image is created with Nginx serving the static files  
-
-**Scenario 6: Artifact Upload and Retention**  
-Given both backend and frontend builds complete successfully  
+**Scenario 5: Artifact Management**  
+Given both builds complete successfully  
 When the upload artifact steps execute  
 Then artifacts are stored with 7-day retention and available for download  
-
-**Scenario 7: Pipeline Summary Generation**  
-Given both backend and frontend jobs complete  
-When the summary job executes  
-Then a comprehensive report is generated showing job status and Docker image tags  
-
-**Scenario 8: Manual Pipeline Trigger**  
-Given a user has repository access  
-When the "Run workflow" button is clicked in the Actions tab  
-Then the pipeline executes with manually specified parameters  
-
----
 
 ## Usage Instructions
 
@@ -270,35 +250,28 @@ Then the pipeline executes with manually specified parameters
 
 1. Navigate to your GitHub repository
 2. Click on the **Actions** tab
-3. Select **Kaiburr CI/CD Pipeline** from the workflows list
+3. Select **Kaiburr CI/CD Pipeline** from workflows list
 4. View recent runs and their status
 5. Click on any run to see detailed logs
 
 ### Triggering the Pipeline
 
-**Automatic Trigger:**
+**Automatic:**
 ```bash
 git add .
-git commit -m "feat: update backend API"
+git commit -m "feat: update code"
 git push origin main
 ```
 
-**Manual Trigger:**
-1. Go to Actions tab
-2. Select "Kaiburr CI/CD Pipeline"
-3. Click "Run workflow"
-4. Select branch and click "Run workflow"
+**Manual:** Actions tab → "Kaiburr CI/CD Pipeline" → "Run workflow"
 
 ### Downloading Artifacts
 
-1. Open a completed workflow run
+1. Open completed workflow run
 2. Scroll to "Artifacts" section
 3. Download `backend-jar` or `frontend-dist`
-4. Artifacts are retained for 7 days
 
----
-
-## 🧪 Local Testing
+## Local Testing
 
 ### Test Backend Docker Image
 
@@ -332,26 +305,22 @@ docker run -p 3000:80 kaiburr-frontend:local
 start http://localhost:3000
 ```
 
----
-
-## ⚙️ Configuration Details
+## Configuration
 
 ### Environment Variables
 
 | Variable | Value | Usage |
 |----------|-------|-------|
-| `BACKEND_IMAGE` | `kaiburr-backend` | Backend Docker image name |
-| `FRONTEND_IMAGE` | `kaiburr-frontend` | Frontend Docker image name |
+| `BACKEND_IMAGE` | kaiburr-backend | Backend Docker image name |
+| `FRONTEND_IMAGE` | kaiburr-frontend | Frontend Docker image name |
 | `github.run_number` | Auto-incremented | Image version tag |
-| `github.repository_owner` | `mah03esh` | Docker registry namespace |
+| `github.repository_owner` | mah03esh | Docker registry namespace |
 
 ### Workflow Inputs
 
 The workflow uses:
-- **JDK 17** (Temurin distribution)
-- **Node.js 20** (LTS version)
-- **Maven 3.9+** (bundled with setup-java)
-- **npm** (bundled with Node.js)
+- **JDK 17** (Temurin distribution) with Maven 3.9+
+- **Node.js 20** (LTS version) with npm
 - **Docker Engine** (pre-installed on ubuntu-latest)
 
 ### Cache Strategy
@@ -360,67 +329,9 @@ The workflow uses:
 - **npm**: Dependencies cached via `setup-node@v4`
 - Caches persist across workflow runs for faster builds
 
----
+## Pipeline Metrics
 
-## 🛠️ Troubleshooting
-
-### Build Failures
-
-**Maven build fails:**
-```bash
-# Check Java version
-- name: Verify Java
-  run: java -version
-
-# Check Maven version
-- name: Verify Maven
-  run: mvn -version
-```
-
-**npm build fails:**
-```bash
-# Clear npm cache
-- name: Clear Cache
-  run: npm cache clean --force
-
-# Reinstall dependencies
-- name: Fresh Install
-  run: rm -rf node_modules && npm install
-```
-
-### Docker Build Issues
-
-**Build context too large:**
-```bash
-# Ensure .dockerignore exists
-- node_modules
-- target
-- .git
-```
-
-**Image not found:**
-```bash
-# List Docker images
-docker images
-
-# Verify build completed
-docker ps -a
-```
-
-### Permission Issues
-
-**Permission denied in workflow:**
-```yaml
-# Add execute permissions
-- name: Make script executable
-  run: chmod +x script.sh
-```
-
----
-
-## 📊 Pipeline Metrics
-
-### Typical Execution Times
+### Execution Times
 
 | Job | Average Duration |
 |-----|------------------|
@@ -435,40 +346,87 @@ docker ps -a
 - **Storage**: ~100-150MB per workflow run (artifacts)
 - **Retention**: Artifacts kept for 7 days
 
----
-
-## 🎓 Learning Outcomes
+## Learning Outcomes
 
 This CI/CD pipeline demonstrates:
 
-1.   GitHub Actions workflow creation
-2.   Parallel job execution
-3.   Multi-stage Docker builds
-4.   Caching strategies for faster builds
-5.   Artifact management
-6.   Automated versioning
-7.   Status reporting and summaries
+1. GitHub Actions workflow creation and configuration
+2. Parallel job execution for faster builds
+3. Multi-stage Docker builds for optimized images
+4. Caching strategies for dependency management
+5. Artifact management with retention policies
+6. Automated versioning using run numbers
+7. Status reporting and pipeline summaries
 
----
+## Troubleshooting
 
-## 📚 References
+### Build Failures
+
+**Maven build fails:**
+```bash
+# Check Java version
+java -version
+
+# Check Maven version
+mvn -version
+
+# Verify dependencies
+mvn dependency:tree
+```
+
+**npm build fails:**
+```bash
+# Clear npm cache
+npm cache clean --force
+
+# Reinstall dependencies
+rm -rf node_modules && npm install
+```
+
+### Docker Build Issues
+
+**Build context too large:**
+```
+# Ensure .dockerignore exists with:
+node_modules
+target
+.git
+*.log
+```
+
+**Image not found:**
+```bash
+# List Docker images
+docker images
+
+# Verify build completed
+docker ps -a
+
+# Check build logs
+docker logs <container_id>
+```
+
+### Permission Issues
+
+**Permission denied in workflow:**
+```yaml
+# Add execute permissions
+- name: Make script executable
+  run: chmod +x script.sh
+```
+
+## References
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
 - [Docker Multi-Stage Builds](https://docs.docker.com/build/building/multi-stage/)
 - [Maven Central Repository](https://mvnrepository.com/)
 - [npm Registry](https://www.npmjs.com/)
 
----
-
 ## Author
 
-**Mahesh **
-- GitHub: [@mah03esh](https://github.com/mah03esh)
-- Repository: [kaiburr-task4](https://github.com/mah03esh/kaiburr-task4)
+**Mahesh** - GitHub: [@mah03esh](https://github.com/mah03esh) - [kaiburr-task4](https://github.com/mah03esh/kaiburr-task4)
 
----
-
-## 📝 License
+## License
 
 This project is part of the Kaiburr Assessment and is for educational purposes.
 
